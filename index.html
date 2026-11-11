@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>3 paires, toute l'année ?</title>
+<style>
+/* ──────────────────────────────────────────────────────────────────────────────
+   Brume · le kit ARTEFACTS (06/11/2026). À coller en tête de toute page publiée en artefact.
+   Pourquoi : retour de Damien du 06/11 : « l'Encart, je l'ai validé ; les artefacts, c'est beau mais c'est blanc.
+   Plus de grain, plus de texture, cohérent avec la taskbar. »
+   Ce qui change par rapport à tokens.css :
+     1. TOUJOURS sombre. Plus de bascule en clair quand l'appareil est en clair (c'était la cause du blanc).
+        Le clair n'existe que si on le force : <html data-theme="light">, et seulement sur sa demande.
+     2. Le grain se VOIT : 14 % sur le fond (au lieu de 5 %), 10 % dans le verre, 30 % dans les orbes (comme l'île).
+     3. Le fond reprend l'île : nuit #070A12 + nappe bleu nuit permanente en bas + halo du pan + vignette.
+   Pan de la page : <body data-pan="contenu|perso|business|marque">. Une seule teinte vive par page.
+   ────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: dark;
+  --encre: #000000;
+  --fond: #070A12;
+  --nappe: #1C3370;             /* le bleu nuit permanent du bas de l'île */
+  --surface: #0F131C;
+  --surface-haute: #161B26;
+  --filet: rgba(255, 255, 255, 0.08);
+  --reflet: rgba(255, 255, 255, 0.14);
+  --texte: #F4F5F7;
+  --texte-2: rgba(244, 245, 247, 0.62);
+  --texte-3: rgba(244, 245, 247, 0.38);
+
+  --contenu: #FF4D1F;  --contenu-2: #FF2D55;  --contenu-3: #FFB347;
+  --perso: #F0628E;    --perso-2: #8E1F4F;    --perso-3: #FFC4D6;
+  --business: #2F6BFF; --business-2: #0B2A8F; --business-3: #7CC0FF;
+  --marque: #8B5CF6;   --marque-2: #4C1D95;   --marque-3: #E3A6FF;
+  --pan: var(--business); --pan-2: var(--business-2); --pan-3: var(--business-3);
+
+  --verre: rgba(18, 23, 36, 0.72);
+  --verre-dense: rgba(10, 14, 23, 0.9);
+  --verre-flou: blur(30px) saturate(160%);
+
+  /* Le grain : un bruit monochrome en incrustation. C'est lui qui fait « photo », pas plastique. */
+  --bruit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.7' intercept='-.2'/%3E%3CfeFuncG type='linear' slope='1.7' intercept='-.2'/%3E%3CfeFuncB type='linear' slope='1.7' intercept='-.2'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-fond: 0.11;   /* fondu normal : sur la nuit, l'incrustation ne se voit pas */
+  --grain-verre: 0.07;
+  --grain-orbe: 0.55;
+
+  --r-s: 10px; --r-m: 14px; --r-l: 20px; --r-xl: 28px; --r-pilule: 999px;
+  --police: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+  --police-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --suivi: 0.08em;
+  --ombre: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --ressort: cubic-bezier(.32, .72, .25, 1);
+}
+[data-pan="contenu"]  { --pan: var(--contenu);  --pan-2: var(--contenu-2);  --pan-3: var(--contenu-3); }
+[data-pan="perso"]    { --pan: var(--perso);    --pan-2: var(--perso-2);    --pan-3: var(--perso-3); }
+[data-pan="business"] { --pan: var(--business); --pan-2: var(--business-2); --pan-3: var(--business-3); }
+[data-pan="marque"]   { --pan: var(--marque);   --pan-2: var(--marque-2);   --pan-3: var(--marque-3); }
+
+/* Le fond : nuit, nappe bleue en bas, halo du pan en haut à droite, son profond en bas à gauche, vignette, grain. */
+html, body { background: var(--fond); color: var(--texte); }
+body.brume {
+  font: 15px/1.55 var(--police);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  background:
+    radial-gradient(70% 55% at 50% 115%, color-mix(in srgb, var(--nappe) 60%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 92% -5%, color-mix(in srgb, var(--pan) 34%, transparent), transparent 70%),
+    radial-gradient(45% 40% at -5% 75%, color-mix(in srgb, var(--pan-2) 30%, transparent), transparent 70%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    var(--fond);
+  background-attachment: fixed;
+  transition: background 0.4s var(--ressort);
+}
+body.brume::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  background-image: var(--bruit); background-size: 220px;
+  opacity: var(--grain-fond); mix-blend-mode: soft-light;
+}
+
+/* Le verre : fond dense, halo du pan au bas de la carte, grain dedans, reflet en haut. */
+.verre {
+  position: relative; isolation: isolate; overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 85% 120%, color-mix(in srgb, var(--pan) 22%, transparent), transparent 70%),
+    var(--verre-dense);
+  -webkit-backdrop-filter: var(--verre-flou); backdrop-filter: var(--verre-flou);
+  border: 1px solid var(--filet);
+  border-radius: var(--r-l);
+  box-shadow: inset 0 1px 0 var(--reflet), var(--ombre);
+}
+.verre::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: var(--bruit); background-size: 220px; opacity: var(--grain-verre); mix-blend-mode: screen;
+}
+.verre.calme { background: var(--verre-dense); }   /* sans halo : une carte d'info */
+
+/* L'orbe : la seule façon de mettre de la couleur. Sphère du dégradé, grainée, reflet, lueur. */
+.orbe {
+  --d: 12px;
+  position: relative; display: inline-block; flex: none; width: var(--d); height: var(--d); border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--pan-3), var(--pan) 48%, var(--pan-2) 100%);
+  box-shadow: 0 0 calc(var(--d) * 0.9) color-mix(in srgb, var(--pan) 45%, transparent);
+  overflow: hidden; vertical-align: middle;
+}
+.orbe::before { /* grain */
+  content: ""; position: absolute; inset: 0; background-image: var(--bruit); background-size: 160px;
+  opacity: var(--grain-orbe); mix-blend-mode: soft-light;
+}
+.orbe::after { /* reflet */
+  content: ""; position: absolute; width: 40%; height: 26%; left: 20%; top: 14%; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55); filter: blur(calc(var(--d) * 0.05));
+}
+.orbe[data-etat="bloque"] { --d: 15px; box-shadow: 0 0 calc(var(--d) * 1.2) color-mix(in srgb, var(--pan) 80%, transparent); }
+.orbe[data-etat="attend"] { --d: 9px; opacity: .7; box-shadow: none; }
+.orbe[data-etat="travaille"] { animation: souffle 4s ease-in-out infinite; }
+.orbe[data-etat="fait"] { opacity: .35; filter: saturate(.4); }
+@keyframes souffle { 50% { transform: scale(1.14); filter: brightness(1.15); } }
+
+/* Texte */
+.etiquette { font: 500 10.5px/1.4 var(--police-mono); letter-spacing: var(--suivi); text-transform: uppercase; color: var(--texte-3); }
+.titre { font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+.second { color: var(--texte-2); }
+
+/* Boutons : pilule lumineuse du pan (principal), verre (secondaire). Aucun picto. */
+.bouton {
+  font: 600 14px/1 var(--police); color: #fff; padding: 12px 20px; border-radius: var(--r-pilule); border: 0; cursor: pointer;
+  background: linear-gradient(135deg, var(--pan), var(--pan-2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 0 32px color-mix(in srgb, var(--pan) 40%, transparent);
+  transition: transform .22s var(--ressort);
+}
+.bouton.verre-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--filet); box-shadow: inset 0 1px 0 var(--reflet); color: var(--texte); }
+.bouton:hover { transform: scale(1.03); } .bouton:active { transform: scale(0.96); }
+.bouton:focus-visible { outline: 2px solid var(--pan-3); outline-offset: 3px; }
+
+/* Le clair, seulement s'il est demandé (data-theme="light") : papier froid, grain gardé. */
+:root[data-theme="light"] {
+  color-scheme: light; --fond: #EEF0F4; --nappe: #C9D6F2; --texte: #0B0C10; --texte-2: rgba(11,12,16,.62); --texte-3: rgba(11,12,16,.4);
+  --filet: rgba(7,8,11,.08); --reflet: rgba(255,255,255,.9); --verre-dense: rgba(255,255,255,.82); --grain-fond: .10; --ombre: 0 18px 50px rgba(15,18,30,.14);
+}
+
+@media (prefers-reduced-motion: reduce) { .orbe, .bouton { animation: none !important; transition: none !important; } }
+
+*{box-sizing:border-box}
+body{margin:0;padding:0 16px 90px}
+main{max-width:640px;margin:0 auto;position:relative;z-index:1}
+h1,h2,h3{margin:0}
+.hero{padding:60px 4px 26px;position:relative}
+.hero .orbe{--d:70px;position:absolute;right:6px;top:44px;animation:souffle 6s ease-in-out infinite}
+.hero h1{font-size:36px;line-height:1.06;letter-spacing:-.03em;max-width:11ch}
+.hero p{margin:16px 0 0;font-size:16px;line-height:1.5;max-width:34ch;color:var(--texte-2)}
+.hero p b{color:var(--texte)}
+section{margin:34px 0}
+section>.etiquette{display:block;margin:0 4px 10px}
+.carte{padding:20px;margin-bottom:12px}
+.carte h2{font-size:23px;letter-spacing:-.02em;line-height:1.15}
+.carte p{margin:10px 0 0;line-height:1.55;color:var(--texte-2)}
+.carte p b{color:var(--texte)}
+.franc{border-left:2px solid var(--pan);padding:14px 16px;margin:14px 0 0;color:var(--texte-2);font-size:14px;line-height:1.5;border-radius:0 var(--r-m) var(--r-m) 0;background:rgba(255,255,255,.03)}
+.franc b{color:var(--texte)}
+/* puces météo */
+.puces{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.puce{background:rgba(255,255,255,.04);border:1px solid var(--filet);color:var(--texte-2);font:500 14px var(--police);padding:9px 14px;border-radius:var(--r-pilule);cursor:pointer;transition:all .3s var(--ressort);-webkit-tap-highlight-color:transparent}
+.puce.on{color:var(--texte);border-color:color-mix(in srgb,var(--pan) 60%,transparent);background:color-mix(in srgb,var(--pan) 14%,transparent);transform:scale(1.04)}
+.paire{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--filet)}
+.paire:first-of-type{border-top:0;padding-top:2px}
+.paire .orbe{--d:26px;flex:none;margin-top:2px;transition:opacity .5s,transform .5s var(--ressort),filter .5s}
+.paire[data-n="0"] .orbe{opacity:.12;transform:scale(.7);filter:saturate(0)}
+.paire[data-n="1"] .orbe{opacity:.5;transform:scale(.85)}
+.paire[data-n="2"] .orbe{opacity:1;transform:scale(1.05)}
+.paire h3{font-size:17px;letter-spacing:-.01em}
+.paire .note{font:600 11px var(--police-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texte-3);margin-left:8px}
+.paire[data-n="2"] .note{color:var(--pan-3)}
+.paire .why{margin:5px 0 0;font-size:14px;line-height:1.45;color:var(--texte-2)}
+.bilan{margin-top:12px;font-size:14px;color:var(--texte-2);line-height:1.45}
+.bilan b{color:var(--texte)}
+/* spec */
+.spec{padding:14px 0;border-top:1px solid var(--filet)}
+.spec:first-of-type{border-top:0;padding-top:4px}
+.spec .num{font:600 12px var(--police-mono);color:var(--pan-3);letter-spacing:.06em}
+.spec h3{font-size:18px;margin-top:4px}
+.spec ul{margin:8px 0 0;padding-left:18px;color:var(--texte-2);font-size:14px;line-height:1.55}
+.spec li b{color:var(--texte)}
+/* trous */
+.trou{padding:14px 0;border-top:1px solid var(--filet)}
+.trou:first-of-type{border-top:0;padding-top:4px}
+.trou h3{font-size:17px}
+.trou p{margin:6px 0 0;font-size:14px;line-height:1.5}
+/* angles */
+.angle{padding:16px 0;border-top:1px solid var(--filet)}
+.angle:first-of-type{border-top:0;padding-top:4px}
+.angle .num{font:600 12px var(--police-mono);color:var(--pan-3);letter-spacing:.06em}
+.angle h3{font-size:18px;margin-top:4px;line-height:1.25}
+.angle p{margin:6px 0 0;font-size:14px;line-height:1.5}
+.reco{display:inline-block;margin-left:6px;font:600 10px var(--police-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--pan-3);border:1px solid color-mix(in srgb,var(--pan) 50%,transparent);padding:2px 7px;border-radius:var(--r-pilule);vertical-align:middle}
+.pied{color:var(--texte-3);font-size:12px;line-height:1.5;margin:30px 4px 0}
+</style>
+<body class="brume" data-pan="contenu">
+<main>
+  <header class="hero">
+    <span class="orbe"></span>
+    <span class="etiquette">Vidéo · chaussures classiques</span>
+    <h1>3 paires, toute l'année ?</h1>
+    <p>Ton idée : <b>un mocassin, une derby, une boots</b> et le vestiaire est complet. Verdict : <b>ça tient, à deux trous près, et seulement si chaque paire est bien choisie.</b></p>
+  </header>
+
+  <section>
+    <span class="etiquette">Le crash-test : touche une situation</span>
+    <div class="verre carte">
+      <div class="puces" id="puces"></div>
+      <div id="paires"></div>
+      <div class="bilan" id="bilan"></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="etiquette">Le contre-argument le plus fort</span>
+    <div class="verre carte">
+      <h2>La règle ne marche que si les specs sont bonnes</h2>
+      <p>Trois paires en daim marron à semelle cuir : ta rotation meurt à la première pluie, et tu n'as rien de noir pour un enterrement. <b>Ce n'est pas le nombre qui fait le vestiaire, c'est la couleur et la semelle.</b></p>
+      <div class="franc"><b>Pour ta vidéo :</b> c'est là qu'est la vraie valeur. « 3 paires » tout le monde l'a déjà dit ; « ces 3 paires-là, avec ces 2 détails » personne ne le dit.</div>
+    </div>
+  </section>
+
+  <section>
+    <span class="etiquette">Les 3 paires qui tiennent vraiment</span>
+    <div class="verre carte">
+      <div class="spec"><span class="num">01 · MOCASSIN</span><h3>Penny loafer, cuir lisse, brun foncé ou bordeaux</h3>
+        <ul><li><b>Pour :</b> chaleur, bureau, voyage, jean comme pantalon à pinces.</li><li><b>Éviter :</b> le daim clair en premier achat (pluie, taches).</li></ul></div>
+      <div class="spec"><span class="num">02 · DERBY</span><h3>Cuir lisse noir, semelle gomme discrète</h3>
+        <ul><li><b>Pour :</b> costume, mariage, entretien, pluie de ville.</li><li><b>Pourquoi noir :</b> les deux autres sont marron ; la derby couvre tout le « sérieux ».</li></ul></div>
+      <div class="spec"><span class="num">03 · BOOTS</span><h3>Chelsea ou lacée, brune, semelle gomme crantée</h3>
+        <ul><li><b>Pour :</b> pluie, froid, neige, verglas, week-end.</li><li><b>Éviter :</b> semelle cuir lisse, elle glisse sur trottoir mouillé.</li></ul></div>
+      <div class="franc"><b>Le fait qui sert ton idée :</b> les cordonniers conseillent de laisser reposer une chaussure en cuir 24 h entre deux ports pour qu'elle sèche. Trois paires, c'est déjà une vraie rotation.</div>
+    </div>
+  </section>
+
+  <section>
+    <span class="etiquette">Les trous à dire honnêtement</span>
+    <div class="verre carte">
+      <div class="trou"><h3>Le sport et la grosse journée de marche</h3>
+        <p>Aucune des trois ne remplace une basket pour 20 000 pas ou une salle. Dis-le : « classique », pas « unique ». Ton public porte des baskets, il le pensera de toute façon.</p></div>
+      <div class="trou"><h3>Le très formel</h3>
+        <p>Smoking ou mariage strict : la règle veut une richelieu noire. La derby noire passe dans la plupart des mariages, pas dans tous.</p></div>
+      <div class="trou"><h3>Bonus : l'été caniculaire</h3>
+        <p>Le mocassin le couvre, mais seul. Si tu le portes tous les jours de juillet, il ne sèche jamais : c'est le point faible de la rotation.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="etiquette">3 angles, à valider ou réécrire</span>
+    <div class="verre carte">
+      <div class="angle"><span class="num">A</span><h3>« 3 paires suffisent… si tu choisis ces détails-là » <span class="reco">conseillé</span></h3>
+        <p>Le conseil honnête, ton registre qui convertit. Tu donnes la règle puis le piège (couleur, semelle). Le hook promet exactement ce que la vidéo tient.</p></div>
+      <div class="angle"><span class="num">B</span><h3>Le crash-test : pluie, chaleur, mariage</h3>
+        <p>Tu passes chaque situation et tu tranches face caméra : « mocassin sous la pluie ? non ». Visuel, rythmé, verdicts nets. Plus long à tourner.</p></div>
+      <div class="angle"><span class="num">C</span><h3>Le budget : un vestiaire complet pour X €</h3>
+        <p>Ton fil valeur/prix : la même rotation à 3 budgets. Le plus fort pour Diggeur, mais il faut vérifier chaque prix avant de tourner.</p></div>
+      <div class="franc"><b>Pont Diggeur :</b> une page « la rotation 3 paires » avec une paire par budget, lien en commentaire épinglé, en dernier.</div>
+    </div>
+  </section>
+
+  <p class="pied">Pensé pour un public homme (ton audience). Faits : conseils d'entretien et de dress code courants ; aucun prix avancé ici, à vérifier si tu prends l'angle C.</p>
+</main>
+<script>
+const S=[
+ {k:"Pluie",m:[1,"Cuir lisse oui, daim non ; semelle cuir glissante"],d:[2,"Semelle gomme : pas de souci"],b:[2,"Faite pour"]},
+ {k:"Neige, verglas",m:[0,"Trop bas, trop fin"],d:[1,"Ça passe sur trottoir dégagé"],b:[2,"Si semelle crantée"]},
+ {k:"Canicule",m:[2,"Sans chaussettes visibles, parfait"],d:[1,"Possible, mais chaud"],b:[0,"Non"]},
+ {k:"Froid sec",m:[1,"Avec chaussettes épaisses"],d:[2,"Oui"],b:[2,"Oui"]},
+ {k:"Bureau",m:[2,"Oui"],d:[2,"Oui"],b:[2,"Chelsea surtout"]},
+ {k:"Mariage, costume",m:[1,"Mariage d'été décontracté seulement"],d:[2,"Noire : oui dans la plupart des cas"],b:[1,"Chelsea noire lisse, à la limite"]},
+ {k:"Soirée",m:[2,"Oui"],d:[2,"Oui"],b:[2,"Oui"]},
+ {k:"Voyage, marche",m:[2,"Se retire vite, léger"],d:[1,"Correct"],b:[1,"Lourde dans une valise"]},
+ {k:"Sport, 20 000 pas",m:[0,"Non"],d:[0,"Non"],b:[0,"Non : c'est le trou"]}
+];
+const N=["Ne tient pas","Tient si…","Tient"],P=[["m","Mocassin"],["d","Derby"],["b","Boots"]];
+const pu=document.getElementById("puces"),pa=document.getElementById("paires"),bi=document.getElementById("bilan");
+function show(i){[...pu.children].forEach((e,j)=>e.classList.toggle("on",j===i));const s=S[i];
+ pa.innerHTML=P.map(([c,n])=>`<div class="paire" data-n="${s[c][0]}"><span class="orbe"></span><div><h3>${n}<span class="note">${N[s[c][0]]}</span></h3><p class="why">${s[c][1]}</p></div></div>`).join("");
+ const ok=P.filter(([c])=>s[c][0]===2).length;
+ bi.innerHTML=ok?`<b>Couvert.</b> ${ok} paire${ok>1?"s":""} sur 3 font le job.`:`<b>Pas couvert.</b> Aucune des trois : il faut une 4e paire hors règle.`;}
+S.forEach((s,i)=>{const b=document.createElement("button");b.className="puce";b.textContent=s.k;b.onclick=()=>show(i);pu.appendChild(b)});
+show(0);
+</script>
+</body>
+</html>
