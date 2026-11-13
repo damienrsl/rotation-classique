@@ -44,6 +44,80 @@ section>.etiquette{display:inline-block!important;padding:5px 11px;border-radius
 .orbe::after{content:"";position:absolute;inset:0;border-radius:50%;background-image:var(--bruit);background-size:80px;mix-blend-mode:overlay;opacity:.5}
 @keyframes souffle{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 
+/* Couche LISIBLE (14/11/2026) : injectée après artefact-aura.css par fabrique-artefact.py.
+   Retour de Damien : « très peu lisible, qu'ils prennent toute la page, ludique, compris facilement ». */
+:root{--lis-max:1280px;--lis-pad:clamp(20px,5vw,72px);--lis-base:18px}
+html{font-size:var(--lis-base)}
+body.aura{font-size:1rem;line-height:1.6}
+body.aura main{max-width:var(--lis-max)!important;padding:0 var(--lis-pad) 80px!important;margin:0 auto}
+/* progression de lecture + chapitres */
+.lis-progres{position:fixed;left:0;top:0;height:4px;width:0;z-index:50;background:linear-gradient(90deg,var(--bleu-chat),var(--bleu-renard));transition:width .15s linear}
+.lis-nav{position:sticky;top:12px;z-index:40;display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;margin:16px 0 8px;border-radius:999px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 30px -18px rgba(12,20,98,.35)}
+.lis-nav a{font:600 13px var(--police);color:var(--texte-2);text-decoration:none;padding:7px 13px;border-radius:999px;transition:all .3s var(--ressort);white-space:nowrap}
+.lis-nav a.on{color:#fff;background:linear-gradient(135deg,var(--bleu-chat),var(--bleu-renard));box-shadow:0 6px 16px -6px rgba(36,54,184,.6)}
+@media(max-width:700px){.lis-nav{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;border-radius:20px}.lis-nav::-webkit-scrollbar{display:none}}
+/* titres et textes */
+body.aura .hero{padding:clamp(40px,6vw,80px) 0 30px!important;display:grid;grid-template-columns:1fr;gap:16px 48px;align-items:end}
+@media(min-width:900px){body.aura .hero{grid-template-columns:3fr 2fr}}
+body.aura .hero h1{font-size:clamp(38px,5.2vw,72px)!important;max-width:16ch!important;line-height:1.02!important}
+body.aura .hero p{font-size:clamp(18px,1.6vw,24px)!important;max-width:40ch!important;line-height:1.45!important}
+body.aura .hero .orbe{position:static!important;--d:56px;grid-row:1;justify-self:start}
+@media(min-width:900px){body.aura .hero .orbe{grid-column:2;grid-row:1/3;justify-self:end;align-self:start;--d:84px}}
+body.aura section{margin:clamp(36px,5vw,64px) 0!important;scroll-margin-top:90px}
+body.aura section>.etiquette{font-size:13px!important;margin:0 0 14px!important}
+body.aura .carte{padding:clamp(20px,3vw,36px)!important}
+body.aura .carte h2{font-size:clamp(24px,2.6vw,36px)!important;line-height:1.1!important}
+body.aura .carte>p,body.aura .spec p,body.aura .spec ul,body.aura .chiffre p,body.aura .bilan,body.aura .franc{font-size:1rem!important;line-height:1.55!important}
+body.aura .spec h3{font-size:clamp(19px,1.5vw,22px)!important}
+body.aura .num{font-size:13px!important}
+body.aura table{font-size:1.05rem!important}
+body.aura th{font-size:12px!important}
+body.aura td,body.aura th{padding:13px 8px!important}
+body.aura .formule{font-size:clamp(22px,2.4vw,34px)!important}
+body.aura .dictee,body.aura .modele{font-size:1.05rem!important;line-height:1.6!important;padding:18px 20px!important}
+body.aura .franc{padding:18px 22px!important;margin-top:18px!important}
+body.aura .pied{font-size:14px!important}
+/* grilles : une carte par idée, pleine largeur */
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:6px}
+.grille>*{border-top:0!important;padding:20px 22px!important;margin:0!important;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.95);border-radius:var(--r-l);box-shadow:0 8px 24px -18px rgba(12,20,98,.25);transition:transform .35s var(--ressort),box-shadow .35s}
+.grille>*:hover{transform:translateY(-2px);box-shadow:0 18px 34px -18px rgba(12,20,98,.35)}
+.grille>.chiffre{display:block}
+.grille>.chiffre .gros{display:block;white-space:nowrap;font-size:clamp(34px,3.6vw,56px)!important;min-width:0!important;margin-bottom:10px;line-height:.95}
+.grille>.chiffre .barre{margin-top:14px}
+.grille>.modele{margin:0!important}
+.grille>*:first-of-type{padding-top:20px!important}
+.grille+.franc{grid-column:1/-1}
+/* boutons de jeu plus gros, tapables */
+body.aura .puce{font-size:1rem!important;padding:12px 18px!important;border-radius:16px!important;line-height:1.35}
+body.aura .suite{font-size:15px!important;padding:11px 18px!important}
+body.aura .objectif{font-size:1.05rem!important;gap:10px 18px!important}
+body.aura .objectif .v{font-size:1.1rem!important}
+/* chaque fait = une carte, chaque jeu = large */
+@media(min-width:900px){body.aura section.large .carte{padding:40px 48px!important}}
+@media(prefers-reduced-motion:reduce){.grille>*{transition:none}}
+/* aucun texte de carte sous 1rem, quelle que soit la classe propre à la page */
+body.aura .carte p,body.aura .carte li,body.aura .verre p,body.aura .verre li{font-size:max(1rem,1em)!important}
+body.aura .carte h3,body.aura .verre h3{font-size:max(1.15rem,1em)!important}
+/* CRITÈRES DE LISIBILITÉ (14/11, capture du tableau) :
+   1. une ligne de texte ne dépasse pas 72 caractères ; 2. un chiffre n'est jamais à plus de 600 px de son libellé ;
+   3. les chiffres sont plus gros que le texte ; 4. le verre est assez opaque pour que le bleu du fond ne gêne pas. */
+body.aura .carte>p,body.aura .carte>h2,body.aura .franc,body.aura .hero p,body.aura .spec p,body.aura .spec ul,body.aura .chiffre p,body.aura .dictee,body.aura .modele,body.aura .bilan,body.aura .formule{max-width:72ch}
+body.aura .verre{background:linear-gradient(180deg,rgba(255,255,255,.93),rgba(255,255,255,.84))!important}
+body.aura .grille>*{background:rgba(255,255,255,.78)!important}
+body.aura table{max-width:760px!important;width:100%}
+body.aura td:not(:first-child){font-size:1.3rem!important;font-weight:600;letter-spacing:-.01em;width:120px}
+body.aura td:first-child{color:var(--texte-2)}
+body.aura tr:nth-child(even) td{background:rgba(40,95,255,.045)}
+body.aura td{padding:14px 12px!important}
+body.aura th{padding:8px 12px 10px!important}
+body.aura td:first-child,body.aura th:first-child{padding-left:14px!important;border-radius:10px 0 0 10px}
+body.aura td:last-child,body.aura th:last-child{padding-right:14px!important;border-radius:0 10px 10px 0}
+body.aura .objectif{max-width:760px}
+/* listes de cartes avec photo (guides) : 2 colonnes sur Mac */
+.grille-2{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.grille-2{grid-template-columns:1fr 1fr}}
+.grille-2>*{margin:0!important}
+
 *{box-sizing:border-box}
 body{margin:0;padding:0 16px 90px}
 main{max-width:640px;margin:0 auto;position:relative;z-index:1}
@@ -100,6 +174,7 @@ section>.etiquette{display:block;margin:0 4px 10px}
 </style>
 <body class="aura">
 <div class="auras" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="lis-progres" aria-hidden="true"></div>
 <main>
   <header class="hero">
     <span class="orbe"></span>
@@ -129,12 +204,14 @@ section>.etiquette{display:block;margin:0 4px 10px}
   <section>
     <span class="etiquette">Les 3 paires qui tiennent vraiment</span>
     <div class="verre carte">
+      <div class="grille">
       <div class="spec"><span class="num">01 · MOCASSIN</span><h3>Penny loafer, cuir lisse, brun foncé ou bordeaux</h3>
         <ul><li><b>Pour :</b> chaleur, bureau, voyage, jean comme pantalon à pinces.</li><li><b>Éviter :</b> le daim clair en premier achat (pluie, taches).</li></ul></div>
       <div class="spec"><span class="num">02 · DERBY</span><h3>Cuir lisse noir, semelle gomme discrète</h3>
         <ul><li><b>Pour :</b> costume, mariage, entretien, pluie de ville.</li><li><b>Pourquoi noir :</b> les deux autres sont marron ; la derby couvre tout le « sérieux ».</li></ul></div>
       <div class="spec"><span class="num">03 · BOOTS</span><h3>Chelsea ou lacée, brune, semelle gomme crantée</h3>
         <ul><li><b>Pour :</b> pluie, froid, neige, verglas, week-end.</li><li><b>Éviter :</b> semelle cuir lisse, elle glisse sur trottoir mouillé.</li></ul></div>
+      </div>
       <div class="franc"><b>Le fait qui sert ton idée :</b> les cordonniers conseillent de laisser reposer une chaussure en cuir 24 h entre deux ports pour qu'elle sèche. Trois paires, c'est déjà une vraie rotation.</div>
     </div>
   </section>
@@ -142,24 +219,29 @@ section>.etiquette{display:block;margin:0 4px 10px}
   <section>
     <span class="etiquette">Les trous à dire honnêtement</span>
     <div class="verre carte">
+      <div class="grille">
       <div class="trou"><h3>Le sport et la grosse journée de marche</h3>
         <p>Aucune des trois ne remplace une basket pour 20 000 pas ou une salle. Dis-le : « classique », pas « unique ». Ton public porte des baskets, il le pensera de toute façon.</p></div>
       <div class="trou"><h3>Le très formel</h3>
         <p>Smoking ou mariage strict : la règle veut une richelieu noire. La derby noire passe dans la plupart des mariages, pas dans tous.</p></div>
       <div class="trou"><h3>Bonus : l'été caniculaire</h3>
         <p>Le mocassin le couvre, mais seul. Si tu le portes tous les jours de juillet, il ne sèche jamais : c'est le point faible de la rotation.</p></div>
+      </div>
+      
     </div>
   </section>
 
   <section>
     <span class="etiquette">3 angles, à valider ou réécrire</span>
     <div class="verre carte">
+      <div class="grille">
       <div class="angle"><span class="num">A</span><h3>« 3 paires suffisent… si tu choisis ces détails-là » <span class="reco">conseillé</span></h3>
         <p>Le conseil honnête, ton registre qui convertit. Tu donnes la règle puis le piège (couleur, semelle). Le hook promet exactement ce que la vidéo tient.</p></div>
       <div class="angle"><span class="num">B</span><h3>Le crash-test : pluie, chaleur, mariage</h3>
         <p>Tu passes chaque situation et tu tranches face caméra : « mocassin sous la pluie ? non ». Visuel, rythmé, verdicts nets. Plus long à tourner.</p></div>
       <div class="angle"><span class="num">C</span><h3>Le budget : un vestiaire complet pour X €</h3>
         <p>Ton fil valeur/prix : la même rotation à 3 budgets. Le plus fort pour Diggeur, mais il faut vérifier chaque prix avant de tourner.</p></div>
+      </div>
       <div class="franc"><b>Pont Diggeur :</b> une page « la rotation 3 paires » avec une paire par budget, lien en commentaire épinglé, en dernier.</div>
     </div>
   </section>
@@ -186,6 +268,21 @@ function show(i){[...pu.children].forEach((e,j)=>e.classList.toggle("on",j===i))
  bi.innerHTML=ok?`<b>Couvert.</b> ${ok} paire${ok>1?"s":""} sur 3 font le job.`:`<b>Pas couvert.</b> Aucune des trois : il faut une 4e paire hors règle.`;}
 S.forEach((s,i)=>{const b=document.createElement("button");b.className="puce";b.textContent=s.k;b.onclick=()=>show(i);pu.appendChild(b)});
 show(0);
+</script>
+<script>
+(function(){const m=document.querySelector('main');if(!m)return;const secs=[...m.querySelectorAll('section')].filter(s=>s.querySelector(':scope>.etiquette'));
+if(secs.length<3)return;const nav=document.createElement('nav');nav.className='lis-nav';
+const brut=secs.map(s=>s.querySelector(':scope>.etiquette').textContent.replace(/\s*:\s*\d+\s*\/\s*\d+.*$/,'').trim());
+const tetes=brut.map(t=>t.split('·')[0].trim());
+secs.forEach((s,i)=>{s.id=s.id||'ch'+(i+1);const a=document.createElement('a');a.href='#'+s.id;
+const parts=brut[i].split('·').map(x=>x.trim());let t=parts[0];
+if(tetes.filter(x=>x===t).length>1&&parts[1])t=parts[1].replace(/^\d+\.\s*/,'');
+t=t.replace(/\s*:.*$/,'');t=t.charAt(0).toUpperCase()+t.slice(1);a.textContent=t.length>26?t.slice(0,24)+'…':t;nav.appendChild(a)});
+const hero=m.querySelector('header');(hero||m.firstElementChild).insertAdjacentElement('afterend',nav);
+const links=[...nav.children];const pb=document.querySelector('.lis-progres');
+function maj(){const y=window.scrollY+120;let k=0;secs.forEach((s,i)=>{if(s.offsetTop<=y)k=i});links.forEach((a,i)=>a.classList.toggle('on',i===k));
+if(pb){const h=document.documentElement;pb.style.width=(100*h.scrollTop/(h.scrollHeight-h.clientHeight))+'%'}}
+addEventListener('scroll',maj,{passive:true});maj();})();
 </script>
 </body>
 </html>
