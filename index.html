@@ -117,6 +117,10 @@ body.aura .objectif{max-width:760px}
 .grille-2{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:900px){.grille-2{grid-template-columns:1fr 1fr}}
 .grille-2>*{margin:0!important}
+/* hero : titre et texte se suivent, photo d'en-tête en pleine largeur */
+body.aura .hero{align-items:start!important}
+body.aura .hero .photo,body.aura .hero figure{grid-column:1/-1;max-width:980px}
+body.aura .carte p,body.aura .carte li,body.aura .verre p,body.aura .verre li{max-width:72ch}
 
 *{box-sizing:border-box}
 body{margin:0;padding:0 16px 90px}
